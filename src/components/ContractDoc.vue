@@ -1,32 +1,24 @@
 
 <template>
-    <div class="card p-10 m-5 flex flex-col column-container">
+    <div class="card flex flex-col column-container">
         <div class="a4-container  multi-column overflow-y-auto">
             <TabView v-model:activeIndex="active">
                 <TabPanel header="">
                     <div class="">
                             <div class="w-full text-center mb-5">
-                                <strong class="m-0">
-                                    สัญญาจ้างวางระบบและเขียนระบบ
-                                </strong>
+                                <div v-for="(head, index) in base.contract_head">
+                                    <strong class="m-0" :key="index">
+                                        {{ head }}
+                                    </strong>
+                                </div>
                             </div>
                             <div class="text-end">
                                 <p class="m-0">
-                                    ทำที่ {{ contractHead.address[0] }}
+                                    ทำที่ {{ base.contractor?.name }}
                                 </p>
                                 <p class="m-0">
-                                    {{ contractHead.address[1] }}
+                                    {{ base.contractor?.address }}
                                 </p>
-                                <p class="m-0">
-                                    {{ contractHead.address[2] }}
-                                </p>
-                            </div>
-                            <div class="text-center my-3">
-                                <div class="card flex justify-center flex-wrap gap-5 p-fluid">
-                                    <div class="bg-white">
-                                        <input type="date" class="bg-white shadow-nd" v-model="contractHead.date" showIcon inputId="buttondisplay" />
-                                    </div>
-                                </div>
                             </div>
 
                             <div v-if="openEditingPartner" class="card flex justify-center">
@@ -105,71 +97,25 @@
                            
                             <article class="text-wrap my-3">
                                 <p class="m-0 break-words text-wrap text-justify indent-8">
-                                    สัญญาฉบับนี้ทำขึ้นระหว่าง 
-                                    <span 
-                                    v-tooltip.top="{
-                                        value: 'แก้ไข',
-                                        pt: {
-                                            text: 'px-2 bg-black rounded text-white'
-                                        }
-                                    }"
-                                    class="text-sky-600 hover:text-black px-2 underline font-semibold cursor-pointer ease-in-out duration-300 hover:bg-sky-300 hover:rounded" @click.prevent="editingDetail('partner')">{{ partner.name }}</span> 
-                                    เลขประจำตัวประชาชน/เลขประจำตัวผู้เสียภาษี 
-                                    <span 
-                                    v-tooltip.top="{
-                                        value: 'แก้ไข',
-                                        pt: {
-                                            text: 'px-2 bg-black rounded text-white'
-                                        }
-                                    }"
-                                    class="text-sky-600 hover:text-black underline font-semibold cursor-pointer ease-in-out duration-300 hover:bg-sky-300 hover:rounded" @click.prevent="editingDetail('partner')">{{ partner.taxId }}</span> 
-                                    ที่อยู่ 
-                                    <span 
-                                    v-tooltip.top="{
-                                        value: 'แก้ไข',
-                                        pt: {
-                                            text: 'px-2 bg-black rounded text-white'
-                                        }
-                                    }"
-                                    class="text-sky-600 hover:text-black underline font-semibold cursor-pointer ease-in-out duration-300 hover:bg-sky-300 hover:rounded" @click.prevent="editingDetail('partner')">{{ partner.address }}</span> ซึ่งต่อไปในสัญญาฉบับนี้เรียกว่า <strong>“ผู้ว่าจ้าง”</strong> 
-                                    ฝ่ายหนึ่งกับ บริษัท ดิจิตอล ดิเวลล็อปเปอร์ เซอร์วิส เซ็นเตอร์ จำกัด สำนักงานตั้งอยู่ที่ 103 หมู่ 4 ถนนรอบเมืองเชียงใหม่ ตำบลสุเทพ อำเภอเมืองเชียงใหม่ เชียงใหม่ 50200 เลขประจำตัวผู้เสียภาษี 0505566024381 ซึ่งต่อไปในสัญญาจะเรียกว่า <strong>“ผู้รับจ้าง”</strong>
+                                    {{ base.contract_sub_head }}
                                 </p>
                             </article>
-
-                            <!-- <div v-if="openEditingTotalPrice" class="card flex justify-center">
-                                <Dialog class="bg-white p-5 shadow-md rounded" v-model:visible="openEditingTotalPrice" modal :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-                                    <div class="flex flex-col gap-4 text-center">
-                                        <div class="flex flex-col gap-2">
-                                            <label class="px-2 bg-sky-100 w-fit rounded" for="total_price_amount">ราคา (ตัวเลข)</label>
-                                            <InputNumber :minFractionDigits="2" class="border border-sky-700 rounded px-3 py-2 bg-white focus:bg-sky-100 focus:border-0" id="total_price_amount" v-model="contractHead.total_price.amount" aria-describedby="total_price_amount-help" />
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="px-2 bg-sky-100 w-fit rounded" for="total_price_text">ราคา (ภาษาไทย)</label>
-                                            <InputText class="border border-sky-700 rounded px-3 py-2 bg-white focus:bg-sky-100 focus:border-0" id="total_price_text" v-model="contractHead.total_price.text" aria-describedby="total_price_text-help" />
-                                        </div>
-                                        <div class="flex gap-3 self-center my-3">
-                                            <Button class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-300 ease-in-out duration-300" @click="openEditingPartner=false" label="ยืนยัน" />
-                                            <Button class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-300 ease-in-out duration-300" label="ยกเลิก" @click="openEditingPartner=false"/>
-                                        </div>
-                                    </div>
-                                </Dialog>
-                            </div> -->
 
                             <!-- BODY -->
                             <div class="my-3">
                                 <p class="my-2 indent-8">
                                     <strong>คู่สัญญาได้ตกลงกันมีข้อความดังต่อไปนี้</strong>
                                 </p>
-                                <article v-for="(text, index) in body" :key="index" class="my-2">
+                                <article v-for="(text, index) in base.body" :key="index" class="my-2">
                                     <p v-if="text.title" class="m-0 break-words text-pretty indent-8 text-justify">
-                                        <strong>ข้อ {{ text.no }}.) {{ text.title }}</strong>
+                                        <strong>{{ text.title }}</strong>
                                     </p>
                                     <p v-if="text.subtitle" class="my-2 break-words text-pretty indent-8 text-justify">
-                                        <span v-html="text.subtitle"></span>
+                                        <span>{{ text.subtitle }}</span>
                                     </p>
                                     <div class="my-2" v-if="text.detail && text.detail.length > 0">
                                         <p @click="openAccept=true" v-for="(detail, detailIndex) in text.detail" :key="detailIndex" class="m-0 break-words text-pretty indent-8 text-justify">
-                                            {{ text.title ? `ข้อ ${text.no}.${detailIndex+1})` : `ข้อ ${text.no}.)` }} <span v-html="detail"></span>
+                                            <span>{{ detail }}</span>
                                         </p>
                                     </div>
                                 </article>
@@ -242,7 +188,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
@@ -260,6 +206,18 @@ import Calendar from 'primevue/calendar';
 
 const route = useRoute();
 const id = route.params.id
+
+const replacePartner = () => {
+    base.contract_sub_head.replace('partner_name', partner.value.name)
+    console.log(base.contract_sub_head)
+    console.log(partner.value.name)
+}
+
+const { base } = defineProps(['base'])
+
+watch(base, (newValue, oldValue) => {
+  replacePartner();
+});
 
 const buttondisplay = ref();
 const icondisplay = ref();
@@ -365,14 +323,14 @@ const createNewContract = async () => {
 
 const getPartnerData = async () => {
     try {
-        const response = await axios.get(`https://api.nbadigital.tech/v1/Backend-Partner/partner/byid/${id}`)
+        /* const response = await axios.get(`https://api.nbadigital.tech/v1/Backend-Partner/partner/byid/${id}`)
         if(response.data.status){
             partner.value.name = response.data.data.partner_company_name
             partner.value.taxId = response.data.data.partner_company_number
             partner.value.address = response.data.data.partner_company_address
             partner.value.signature = response.data.data.signature
             partner.value.id = response.data.data.id
-        }
+        } */
         body.value = [
     {
         no: '1',
@@ -492,14 +450,15 @@ const contractHead = ref({
 
 const partner = ref({
     id: '',
-    name: 'บริษัท จำไม่ได้ จำกัด',
-    branch: 'สำนักงานใหญ่',
-    taxId: '0000000000000',
-    address: '66/6 หมู่ที่ 8 ตำบล สันทราย อำเภอ สารภี จังหวัด เชียงใหม่ 50140',
+    code: '',
+    name: '/*customer_name*/',
+    branch: '',
+    taxId: '/*customer_taxID*/',
+    address: '/*customer_address*/',
     signature: [
         {
-            name: 'นายประหยัด จันทร์อังคาร',
-            role: 'ผู้บริหาร',
+            name: '________________',
+            role: '',
             position: 'ผู้ว่าจ้าง',
             sign: signature000,
             stamp: true
@@ -585,7 +544,7 @@ const closeEditting = () => {
     getPartnerData()
 }
 
-onMounted(()=>{
+onMounted(async ()=>{
     newThaiDate()
     getPartnerData()
 })
@@ -601,7 +560,8 @@ onMounted(()=>{
     width: auto;
     margin: 0 auto;
     border: 1px solid #ccc;
-    padding: 20mm;
+    padding-left: 20mm;
+    padding-right: 20mm;
     box-sizing: border-box;
     page-break-after: always; /* Ensure a page break after each container */
   }

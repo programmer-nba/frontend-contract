@@ -7,11 +7,11 @@ import PartnersView from '../views/PartnersView.vue'
 import ContractPartner from '../components/ContractDocPartner.vue'
 
 const routes = [
-  {
+  /* {
     path: '/',
     name: 'Home',
     component: HomeView,
-  },
+  }, */
   /* {
     path: '/contract',
     name: 'Contract',
@@ -35,7 +35,7 @@ const routes = [
     component: PartnersView,
   },
   {
-    path: '/contracts',
+    path: '/',
     name: 'Contracts',
     component: ContractBase,
   },

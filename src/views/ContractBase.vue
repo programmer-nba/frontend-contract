@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="mt-10 mx-5 border flex px-5 py-5 justify-center gap-8">
+    <Toast />
+    <nav>
+
+    </nav>
+    <div class="mt-10 mx-5 flex px-5 py-5 justify-center gap-8">
       <ContractTable @selectedContract="selectedContract" @seeContract="seeContract" @createContract="createContract" />
 
       <Dialog
@@ -15,10 +19,47 @@
       >
       <div class="flex flex-col items-center">
         <div class="w-full h-full overflow-y-auto">
+            <div>
+                <InputText
+                class="text-center w-full font-bold text-xl px-2 py-2 focus:bg-green-100 border"
+                v-model="base.contract_name"
+                placeholder="ชื่อสัญญา"
+                required
+            />
+            </div>
+            <div>
+                <InputText
+                class="text-center w-full font-semibold text-lg px-2 py-2 focus:bg-green-100 border"
+                v-model="base.remark"
+                placeholder="คำอธิบายสัญญา"
+            />
+            </div>
+            <div class="flex flex-col w-full gap-y-2 bg-blue-300 px-10 shadow-md justify-center items-center my-10 py-5">
+                <p class="text-xl">รายละเอียดบริษัท</p>
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="base.contractor.name"
+                    placeholder="ชื่อบริษัท"
+                    required
+                />
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="base.contractor.address"
+                    placeholder="ที่อยู่บริษัท"
+                    required
+                />
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="base.contractor.tax_id"
+                    placeholder="เลขประจำผู้เสียภาษี"
+                    required
+                />
+            </div>
             <div class="flex flex-col gap-y-2 bg-slate-100 px-10 shadow-md justify-center items-center mb-10 py-5">
                 <InputText
                     class="text-center font-bold text-xl px-2 py-2 focus:bg-green-100 border"
                     v-model="base.contract_code"
+                    placeholder="รหัสสัญญา"
                     required
                 />
                 <div v-for="(head, headIndex) in base.contract_head"
@@ -36,14 +77,15 @@
           <div class="border py-5 flex w-full my-3 flex-col justify-center items-center">
             <div class="card">
               <Textarea
-                class="border focus:bg-green-100 p-3"
+                class="p-3"
+                :class="!sensitiveCheck ? 'border-red-500 border focus:bg-red-100' : 'border focus:bg-green-100'"
                 v-model="base.contract_sub_head"
                 rows="5"
                 cols="100"
               />
             </div>
-            <p class="text-red-500">
-              *ห้ามแก้ไขข้อมูล date, partner_name
+            <p :class="!sensitiveCheck ? 'text-red-500' : 'text-green-500' ">
+              *ข้อมูลต้องมี date และ partner_name
             </p>
           </div>
           <div
@@ -114,7 +156,6 @@
           </div>
         </div>
         <div class="py-10 w-full flex flex-col justify-center items-center border self-center">
-          <Toast />
           <ConfirmPopup group="headless">
             <template #container="{ message, acceptCallback, rejectCallback }">
               <div class="border-round p-3">
@@ -152,19 +193,49 @@
         ]"
       >
       <div class="flex flex-col items-center">
+        
         <div class="w-full h-full overflow-y-auto">
             <div>
-                <span>ชื่อสัญญา</span>
                 <InputText
                 class="text-center w-full font-bold text-xl px-2 py-2 focus:bg-green-100 border"
                 v-model="newContract.contract_name"
+                placeholder="ชื่อสัญญา"
                 required
             />
+            </div>
+            <div>
+                <InputText
+                class="text-center w-full font-semibold text-lg px-2 py-2 focus:bg-green-100 border"
+                v-model="newContract.remark"
+                placeholder="คำอธิบายสัญญา"
+            />
+            </div>
+            <div class="flex flex-col w-full gap-y-2 bg-blue-300 px-10 shadow-md justify-center items-center my-10 py-5">
+                <p class="text-xl">รายละเอียดบริษัท</p>
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="newContract.contractor.name"
+                    placeholder="ชื่อบริษัท"
+                    required
+                />
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="newContract.contractor.address"
+                    placeholder="ที่อยู่บริษัท"
+                    required
+                />
+                <InputText
+                    class="text-center w-full font-bold px-2 py-2 focus:bg-green-100 border"
+                    v-model="newContract.contractor.tax_id"
+                    placeholder="เลขประจำผู้เสียภาษี"
+                    required
+                />
             </div>
           <div class="flex flex-col gap-y-2 bg-slate-100 px-10 shadow-md justify-center items-center mb-10 py-5">
             <InputText
                 class="text-center font-bold text-xl px-2 py-2 focus:bg-green-100 border"
                 v-model="newContract.contract_code"
+                placeholder="รหัสสัญญา (เช่น HMNL)"
                 required
             />
             <div v-for="(head, headIndex) in newContract.contract_head"
@@ -174,6 +245,7 @@
             <InputText
                 class="text-center font-bold text-xl px-2 py-2 w-full focus:bg-green-100 border"
                 v-model="newContract.contract_head[headIndex]"
+                placeholder="หัวเอกสาร"
                 />
             <Button class="text-red-500 hover:line-through p-0 m-0" v-if="headIndex!==0" icon="pi pi-times" @click="removeNewHead(headIndex)" />
             </div>
@@ -182,14 +254,16 @@
           <div class="border py-5 flex w-full my-3 flex-col justify-center items-center">
             <div class="card">
               <Textarea
-                class="border focus:bg-green-100 p-3"
+                class="p-3"
+                :class="!sensitiveNewCheck ? 'border-red-500 border focus:bg-red-100' : 'border focus:bg-green-100'"
                 v-model="newContract.contract_sub_head"
+                placeholder="คำนำเอกสาร"
                 rows="5"
                 cols="100"
               />
             </div>
-            <p class="text-red-500">
-              *ใส่ date แทนวันที่สร้างสัญญา, partner_name แทนชื่อลูกค้า
+            <p :class="!sensitiveNewCheck ? 'text-red-500' : 'text-green-500' ">
+              *หมายเหตุ* date แทนวันที่สร้างสัญญา, partner_name แทนชื่อลูกค้า (จำเป็นต้องระบุตามตัวแปรที่กำหนด)
             </p>
           </div>
           <div
@@ -286,25 +360,116 @@
         </div>
         </div>
       </Dialog>
+
+      <Dialog
+      v-model:visible="isPartner"
+      modal
+      header=" "
+      :style="[
+        { width: '100%' },
+        { 'padding-left': '10rem' },
+        { 'padding-right': '10rem' },
+      ]"
+    >
+    <div class="flex flex-col items-center">
+      <div class="w-full h-full overflow-y-auto">
+        <div class="card flex justify-content-center">
+            <Dropdown v-model="selectedContractCode" :options="baseList" optionLabel="contract_name" placeholder="เลือกสัญญา" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" />
+        </div>
+        <Button @click="createContractPartner" label="สร้าง" />
+      </div>
+      </div>
+    </Dialog>
+
       <aside>
         <ContractDoc :base="base" />
       </aside>
+
+      <ContractOrder @genContract="genContractPartner" />
     </div>
   </div>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import ContractTable from "../components/Contracts/ContractTable.vue";
+import ContractOrder from "../components/Contracts/ContractOrder.vue";
 import ContractDoc from "../components/ContractDoc.vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import axios from "axios";
 
+onMounted(()=>{
+    getListBaseContract()
+})
+
 const confirm = useConfirm()
 const toast = useToast();
 const loading = ref(false)
-const isNew =ref(false)
+const isNew = ref(false)
 const base = ref({});
+const partnerContract = ref({})
+const isPartner = ref(false)
+const selectedContractCode = ref()
+const baseList = ref()
+
+const genContractPartner = (value) => {
+    isPartner.value = true
+    partnerContract.value = value
+}
+
+const getListBaseContract = async () => {
+    try {
+        const response = await axios.get(`https://api.nbadigital.tech/contract/HaveplaceNoCapital/GetAllContractByCode`)
+        if(response.data.status){
+            baseList.value = response.data.data
+            console.log( baseList.value)
+        }
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+
+const createContractPartner = async () => {
+    const data = {
+        orderId: selectedContractCode.value._id,
+        name: selectedContractCode.value.contract_code,
+        partner_id: partnerContract.value.partner_id,
+        partner_name: partnerContract.value.partner_name,
+        partner_address: `${partnerContract.value.partner_address} ${partnerContract.value.partner_district} ${partnerContract.value.partner_amphure} ${partnerContract.value.partner_province} ${partnerContract.value.partner_postcode}`,
+        partner_signature: partnerContract.value.partner_signature
+    }
+    try {
+        const response = await axios.post(`https://api.nbadigital.tech/contract/HaveplaceNocapital/createCode`,
+            data
+        )
+        if(response.data){
+            console.log(response.data)
+            isPartner.value = false
+            alert('success!')
+        }
+    }
+    catch(err){
+        console.log(err)
+        isPartner.value = false
+    }
+}
+
+const sensitiveCheck = computed(()=>{
+    if(!base.value.contract_sub_head.includes('partner_name') || !base.value.contract_sub_head.includes('date')){
+        return false
+    } else {
+        return true
+    }
+})
+
+const sensitiveNewCheck = computed(()=>{
+    if(!newContract.value.contract_sub_head.includes('partner_name') || !newContract.value.contract_sub_head.includes('date')){
+        return false
+    } else {
+        return true
+    }
+})
 
 const newContract_body = ref({
     no: '',
@@ -324,27 +489,27 @@ const newContract_signature = ref([
 ])
 
 const newContract = ref({
-    contract_code: 'code',
-    contract_name: 'ชื่อสัญญา',
-    contract_head: ['หัวสัญญา'],
-    contract_sub_head: '(ตัวอย่าง) สัญญาฉบับนี้จัดทำขึ้น ณ บริษัท ทศกัณฐ์ ดิจิตอล นิวเจนเนอเรชั่น จำกัด เมื่อวันที่ (date) ระหว่าง บริษัท ทศกัณฐ์ ดิจิตอล  นิวเจนเนอเรชั่น ทะเบียนบริษัทเลขที่ (tax_id) สำนักงานใหญ่ตั้งอยู่ (address) ซึ่งต่อไปในสัญญาฉบับนี้ เรียกว่า “บริษัทฯ” ฝ่ายหนึ่งกับ นาย/นาง/นางสาว (partner_name) ซึ่งต่อไปนี้เรียกว่า “ผู้เปิดศูนย์” ในการให้บริการตามแผนการตลาดของ บริษัทฯ การรับสมัครสมาชิก/การให้บริการสมาชิก การขายสินค้าทุกประเภท และการบริการทุกประเภท โดยบริษัทฯ เป็นศูนย์กลางในการให้ข้อมูล และประสานงาน ทั้งสองฝ่ายตกลงทำสัญญากันดังมีข้อความต่อไปนี้',
+    contract_code: '',
+    contract_name: '',
+    contract_head: [''],
+    contract_sub_head: '(ตัวอย่าง) สัญญาฉบับนี้จัดทำขึ้น ณ ....สถานที่ทำสัญญา.... เมื่อวันที่ date ระหว่าง ....ชื่อบริษัท.... ทะเบียนบริษัทเลขที่ ....เลขประจำตัวผู้เสียภาษี.... สำนักงานใหญ่ตั้งอยู่ ....ที่อยู่บริษัท.... ซึ่งต่อไปในสัญญาฉบับนี้ เรียกว่า “บริษัทฯ” ฝ่ายหนึ่งกับ partner_name ซึ่งต่อไปนี้เรียกว่า “ผู้เปิดศูนย์” ในการให้บริการตามแผนการตลาดของ บริษัทฯ การรับสมัครสมาชิก/การให้บริการสมาชิก การขายสินค้าทุกประเภท และการบริการทุกประเภท โดยบริษัทฯ เป็นศูนย์กลางในการให้ข้อมูล และประสานงาน ทั้งสองฝ่ายตกลงทำสัญญากันดังมีข้อความต่อไปนี้',
     body: [
         {
             no: '1',
-            title: 'หัวข้อ',
-            subtitle: 'หัวข้อย่อย',
-            detail: ['รายละเอียด'] 
+            title: '',
+            subtitle: '',
+            detail: [''] 
         }
     ],
     contractor: {
-        address: 'กรุณาเพิ่มที่อยู่',
-        name: 'กรุณาเพิ่มชื่อ',
+        address: '',
+        name: '',
         stamp: null,
-        tax_id: 'กรุณาเพิ่มเลขประจำตัวผู้เสียภาษี',
-        tel: 'กรุณาเพิ่มเบอร์ติดต่อ',
+        tax_id: '',
+        tel: '',
         signature: []
     },
-    remark: 'คำอธิบายสัญญา'
+    remark: ''
 })
 
 const addNewHead = () => {
@@ -476,7 +641,7 @@ const createNewBaseContract = async () => {
     catch (err) {
         loading.value = false
         isNew.value = false
-        toast.add({severity:'error', summary:'Rejected', detail:'สร้างสัญญาล้มเหลว', life: 3000});
+        toast.add({severity:'error', summary:'สร้างสัญญาล้มเหลว', detail:err.response.data.message, life: 3000});
         console.log(err)
     }
 }

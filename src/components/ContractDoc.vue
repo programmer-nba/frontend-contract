@@ -1,10 +1,10 @@
 
 <template>
     <div class="card flex flex-col column-container">
-        <div class="a4-container  multi-column overflow-y-auto">
+        <div class="a4-container multi-column overflow-y-auto">
             <TabView v-model:activeIndex="active">
                 <TabPanel header="">
-                    <div class="">
+                    <div v-if="base.contract_head" class="">
                             <div class="w-full text-center mb-5">
                                 <div v-for="(head, index) in base.contract_head">
                                     <strong class="m-0" :key="index">
@@ -133,8 +133,7 @@
                                 <div class="relative w-1/2 my-10" v-for="(signature, index) in partner.signature" :key="index">
                                     <div class="flex justify-center items-center gap-5">
                                         <p>ลงชื่อ</p>
-                                        <!-- <img :src="signature.sign" alt="partner-signature" /> -->
-                                        <img v-if="signature.sign" class="h-[50px] w-[120px]" :src="`https://drive.google.com/thumbnail?id=${signature.sign}`" alt="partner-signature" />
+                                        <img v-if="signature.sign && signature.sign!==''" class="h-[50px] w-[120px]" :src="`https://drive.google.com/thumbnail?id=${signature.sign}`" alt="partner-signature" />
                                         <p v-if="!signature.sign">________________</p>
                                         <p>{{ signature.position }}</p>
                                     </div>
@@ -148,7 +147,7 @@
                                         <p>ตราประทับ (ถ้ามี)</p>
                                     </div>
                                     <div class="absolute top-4 left-16 w-[180px] h-[180px] opacity-50">
-                                        <img v-if="partner.stamp && signature.stamp" :src="partner.stamp" alt="partner-stamp" />
+                                        <img v-if="partner.stamp && signature.stamp" :src="`https://drive.google.com/thumbnail?id=${partner.stamp}`" alt="partner-stamp" />
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +157,7 @@
                                     <div class="flex justify-center items-center gap-5">
                                         <p>ลงชื่อ</p>
                                         <!-- <img :src="signature.sign" alt="partner-signature" /> -->
-                                        <img v-if="signature.sign" class="h-[50px] w-[120px]" :src="signature.sign" alt="partner-signature" />
+                                        <img v-if="signature.sign && signature.sign!==''" class="h-[50px] w-[120px]" :src="`https://drive.google.com/thumbnail?id=${signature.sign}`" alt="contractor-signature" />
                                         <p v-if="!signature.sign">________________</p>
                                         <p>{{ signature.position }}</p>
                                     </div>
@@ -172,16 +171,15 @@
                                         <p>ตราประทับ (ถ้ามี)</p>
                                     </div>
                                     <div class="absolute top-4 left-16 w-[180px] h-[180px] opacity-50">
-                                        <img v-if="contractor.stamp && signature.stamp" :src="contractor.stamp" alt="partner-stamp" />
+                                        <img v-if="contractor.stamp && signature.stamp" :src="`https://drive.google.com/thumbnail?id=${contractor.stamp}`" alt="contractor-stamp" />
                                     </div>
                                 </div>
                             </div>
                     </div>
-                    <div class="card flex justify-center mt-10">
-                        <Button class="px-2 py-1 rounded bg-sky-400 hover:bg-sky-700 " type="button" label="ร่างสัญญาใหม่" :loading="loading" @click="createNewContract" />
+                    <div v-if="!base.contract_head" class="w-[500px]">
+
                     </div>
-                </TabPanel>
-                
+                </TabPanel> 
             </TabView>
         </div>
     </div>
@@ -460,25 +458,18 @@ const partner = ref({
             name: '________________',
             role: '',
             position: 'ผู้ว่าจ้าง',
-            sign: signature000,
-            stamp: true
+            sign: null,
+            stamp: false
         },
         {
-            name: 'นายประหวิด วงคำเหลา',
-            role: 'หัวหน้าแผนกกฎหมาย',
+            name: '______________',
+            role: '',
             position: 'พยานผู้ว่าจ้าง',
-            sign: signature001,
-            stamp: true
-        },
-        {
-            name: 'นางประวาณี จันทร์เจ้าเอ๋ย',
-            role: 'หัวหน้าแผนกบัญชี',
-            position: 'พยานผู้ว่าจ้าง',
-            sign: signature002,
+            sign: null,
             stamp: false
         }
     ],
-    stamp: stamp00
+    //stamp: stamp00
 })
 
 const contractor = ref({
@@ -488,7 +479,7 @@ const contractor = ref({
     address: '66/6 หมู่ที่ 8 ตำบล สันทราย อำเภอ สารภี จังหวัด เชียงใหม่ 50140',
     signature: [
         {
-            name: 'บริษัท ดิจิตอล ดิเวลล็อปเปอร์ เซอร์วิส เซ็นเตอร์ จำกัด',
+            name: '',
             role: '-',
             position: 'ผู้รับจ้าง',
             sign: null,
@@ -509,7 +500,7 @@ const contractor = ref({
             stamp: false
         }
     ],
-    stamp: stamp00
+    //stamp: stamp00
 })
 
 const totalAmount = computed(()=>{
@@ -560,6 +551,7 @@ onMounted(async ()=>{
     width: auto;
     margin: 0 auto;
     border: 1px solid #ccc;
+    border-radius: 5rem;
     padding-left: 20mm;
     padding-right: 20mm;
     box-sizing: border-box;

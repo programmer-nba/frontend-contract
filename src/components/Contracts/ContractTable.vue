@@ -1,6 +1,9 @@
 
 <template>
+    <Toast />
+    <ConfirmPopup></ConfirmPopup>
     <div class="card">
+        <Button class="px-2 my-2 text-green-800 hover:bg-green-300" icon="pi pi-plus" label="สร้างสัญญาใหม่" @click="createNewContract()" />
         <DataView :value="contracts" paginator :rows="6">
             <template #list="">
                 <div class="grid grid-nogutter">
@@ -25,7 +28,11 @@
                                 <div class="flex flex-col md:items-end gap-5">
                                     <span class="text-xl font-semibold text-900">{{ contract.remark }}</span>
                                     <div class="flex flex-row-reverse md:flex-row gap-2">
-                                        <Button icon="pi pi-heart" outlined></Button>
+                                        <Button 
+                                            icon="pi pi-trash"
+                                            class="flex-auto md:flex-initial white-space-nowrap text-red-500"
+                                            @click="confirm2($event, contract._id)"
+                                        ></Button>
                                         <Button 
                                             label="แก้ไข" 
                                             class="flex-auto md:flex-initial white-space-nowrap bg-orange-500 text-white px-2 py-1 rounded"
@@ -47,14 +54,20 @@ import axios from 'axios'
 import { ref, onMounted } from "vue";
 import { ProductService } from '../../service/ProductService';
 
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+
+const confirm = useConfirm();
+const toast = useToast();
+
 onMounted(() => {
     ProductService.getProductsSmall().then((data) => (products.value = data));
     getContractsBase()
 });
 
-const emit = defineEmits(['selectedContract','seeContract'])
+const emit = defineEmits(['selectedContract','seeContract', 'createContract'])
 
-const products = ref();
+const products = ref()
 const contracts = ref()
 const selectedContract = ref({})
 
@@ -71,6 +84,36 @@ const getContractsBase = async () => {
     }
 }
 
+const confirm2 = (event, id) => {
+    confirm.require({
+        target: event.currentTarget,
+        message: 'ต้องการลบสัญญานี้หรือไม่?',
+        icon: 'pi pi-info-circle',
+        rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+        acceptClass: 'p-button-danger p-button-sm',
+        rejectLabel: 'ยกเลิก',
+        acceptLabel: 'ลบ',
+        accept: () => {
+            deleteContract(id)
+        },
+        reject: () => {
+            
+        }
+    });
+};
+
+const deleteContract = async (id) => {
+    try {
+        const response = await axios.delete(``)
+        if(response.data){
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'ลบสัญญาสำเร็จ', life: 3000 });
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
 const selectContract = (contract) => {
     selectedContract.value = contract
     emit('selectedContract', contract)
@@ -79,6 +122,10 @@ const selectContract = (contract) => {
 const seeContract = (contract) => {
     selectedContract.value = contract
     emit('seeContract', contract)
+}
+
+const createNewContract = () => {
+    emit('createContract', {})
 }
 
 </script>

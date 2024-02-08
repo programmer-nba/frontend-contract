@@ -40,6 +40,8 @@ import Chip from 'primevue/chip';
 import DataView from 'primevue/dataview';
 import Image from 'primevue/image';
 import Calendar from 'primevue/calendar';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -47,6 +49,7 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router)
 app.use(ToastService)
+app.use(ConfirmationService)
 
 app.use(PrimeVue, { 
     ripple: true, 
@@ -86,5 +89,6 @@ app.component('Chip', Chip);
 app.component('DataView', DataView);
 app.component('Image', Image);
 app.component('Calendar', Calendar);
+app.component('ConfirmPopup', ConfirmPopup);
 
 app.mount('#app')

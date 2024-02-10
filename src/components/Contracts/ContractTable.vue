@@ -104,13 +104,15 @@ const confirm2 = (event, id) => {
 
 const deleteContract = async (id) => {
     try {
-        const response = await axios.delete(``)
+        const response = await axios.delete(`https://api.nbadigital.tech/contract/HaveplaceNocapital/deleteContractBase/${id}`)
         if(response.data){
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'ลบสัญญาสำเร็จ', life: 3000 });
+            toast.add({ severity: 'info', summary: 'สำเร็จ', detail: 'ลบสัญญาแล้ว', life: 3000 });
+            getContractsBase()
         }
     }
     catch(err){
         console.log(err)
+        toast.add({ severity: 'error', summary: 'เกิดข้อผิดพลาด', detail: 'ลบสัญญาไม่สำเร็จ', life: 3000 });
     }
 }
 

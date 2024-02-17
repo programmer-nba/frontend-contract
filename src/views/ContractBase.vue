@@ -419,7 +419,7 @@ const genContractPartner = (value) => {
 
 const getListBaseContract = async () => {
     try {
-        const response = await axios.get(`https://api.nbadigital.tech/contract/HaveplaceNoCapital/GetAllContractByCode`)
+        const response = await axios.get(`${import.meta.env.VITE_CONTRACT}/HaveplaceNoCapital/GetAllContractByCode`)
         if(response.data.status){
             baseList.value = response.data.data
             console.log( baseList.value)
@@ -440,7 +440,7 @@ const createContractPartner = async () => {
         partner_signature: partnerContract.value.partner_signature
     }
     try {
-        const response = await axios.post(`https://api.nbadigital.tech/contract/HaveplaceNocapital/createCode`,
+        const response = await axios.post(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/createCode`,
             data
         )
         if(response.data){
@@ -628,7 +628,7 @@ const createNewBaseContract = async () => {
         remark: newContract.value.remark //*
     }
     try {
-        const response = await axios.post(`https://api.nbadigital.tech/contract/HaveplaceNocapital/create`,
+        const response = await axios.post(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/create`,
             payload
         )
         if(response.data){
@@ -659,7 +659,7 @@ const updateContract = async () => {
         remark: base.value.remark
     }
     try {
-        const response = await axios.put(`https://api.nbadigital.tech/contract/HaveplaceNocapital/EditContract/${id}`,
+        const response = await axios.put(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/EditContract/${id}`,
             payload
         )
         if(response.data){

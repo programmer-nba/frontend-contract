@@ -73,7 +73,7 @@ const selectedContract = ref({})
 
 const getContractsBase = async () => {
     try {
-        const response = await axios.get(`https://api.nbadigital.tech/contract/HaveplaceNocapital/GetAllContract`)
+        const response = await axios.get(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/GetAllContract`)
         if(response.data){
             contracts.value = response.data.data
             console.log(contracts.value)
@@ -104,7 +104,7 @@ const confirm2 = (event, id) => {
 
 const deleteContract = async (id) => {
     try {
-        const response = await axios.delete(`https://api.nbadigital.tech/contract/HaveplaceNocapital/deleteContractBase/${id}`)
+        const response = await axios.delete(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/deleteContractBase/${id}`)
         if(response.data){
             toast.add({ severity: 'info', summary: 'สำเร็จ', detail: 'ลบสัญญาแล้ว', life: 3000 });
             getContractsBase()

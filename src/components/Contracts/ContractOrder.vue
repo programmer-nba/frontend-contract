@@ -73,8 +73,9 @@ const genContract = (data) => {
 
 const getContractOrders = async () => {
     try {
-        const response = await axios.get(`https://api.nbadigital.tech/contract/partner/GetAllPartner`)
+        const response = await axios.get(`${import.meta.env.VITE_PARTNER}/partner/GetAllPartner`)
         if(response.data){
+            console.log(contracts.value)
             contracts.value = response.data.data.filter(item=>item.status==='new')
             console.log(contracts.value)
         }

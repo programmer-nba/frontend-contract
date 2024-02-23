@@ -4,7 +4,7 @@ import {
   type RouteLocationNormalized,
   type NavigationGuardNext
 } from 'vue-router'
-const jwtDecode = await import('jwt-decode')
+import { jwtDecode } from 'jwt-decode';
 
 const authGuard: () => Promise<boolean> = async () => {
   const token: any = localStorage.getItem('token')

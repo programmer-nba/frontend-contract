@@ -73,7 +73,13 @@ const selectedContract = ref({})
 
 const getContractsBase = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/GetAllContract`)
+        const response = await axios.get(`${import.meta.env.VITE_CONTRACT}/HaveplaceNocapital/GetAllContract`,
+            {
+                headers: {
+                    'auth-token' : import.meta.env.VITE_CONTRACT_TOKEN
+                }
+            }
+        )
         if(response.data){
             contracts.value = response.data.data
             console.log(contracts.value)

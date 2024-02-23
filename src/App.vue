@@ -1,15 +1,17 @@
-<template>
-  <div>
-    <nav>
-      <NavBar/>
-    </nav>
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores'
 
-    <router-view>
-    </router-view>
-  </div>
+const auth = useAuthStore()
+
+onMounted(() => {
+  console.log(auth.token)
+})
+</script>
+
+<template>
+  <RouterView />
 </template>
 
-<script setup>
-import NavBar from './components/NavBar.vue';
-
-</script>
+<style scoped></style>

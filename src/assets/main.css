@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-SemiBold.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: aliceblue;
+}
+
+#app {
+  margin: 0 auto;
+  font-family: 'Kanit';
+}

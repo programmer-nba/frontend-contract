@@ -177,6 +177,16 @@ const selectedCode = ref()
 const groupedCodes = computed(() => {
   return [
     {
+      label: 'PDPA',
+      code: 'PDPA',
+      items: [
+        {
+          title: 'PDPA',
+          code: 'PDPA'
+        }
+      ]
+    },
+    {
       label: 'DDSC',
       code: 'DDSC',
       items: ddsc_codes.value
@@ -210,6 +220,7 @@ function changeMainBranch() {
 }
 
 async function saveData() {
+  //selectedCode.value.code = 'pdpa'
   const data = {
     code: selectedCode.value.code,
     start_date: contractPartner.value.start_date,

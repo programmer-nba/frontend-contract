@@ -27,13 +27,14 @@ export const usePartnerContract = defineStore('partner-contract', () => {
 
   const getPartnerContracts = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_CONTRACT}/partner-contract/all`)
+      //const response = await axios.get(`${import.meta.env.VITE_API_CONTRACT}/partner-contract/all`)
+      const response = await axios.get('https://ds7dd5.nbadigitalservice.com/contract/partner-contract/all')
       partnerContracts.value = response.data.data
       console.log(partnerContracts.value.length)
       return response.data
     } catch (err) {
       console.log(err)
-      return err
+      return err.message
     }
   }
 
